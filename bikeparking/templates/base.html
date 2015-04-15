@@ -9,11 +9,6 @@
     </head>
 
     <body>
-      This is a test.
-     <p>{% for rack in racks %}
-        {{ rack.description }}
-      {{ rack.lat }}, {{rack.lng}}
-      {% endfor %}
-     </p>
+      {% block content %}{% endblock %}
     </body>
 </html>

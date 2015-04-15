@@ -36,7 +36,7 @@ class review(models.Model):
 class rackForm(ModelForm):
     class Meta:
         model = rack
-        fields = ['description', 'capacity', 'covered', 'intended']
+        fields = ['lat', 'lng','description', 'capacity', 'covered', 'intended']
         
 class reviewForm(ModelForm):
     class Meta:

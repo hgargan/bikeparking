@@ -3,7 +3,7 @@
 
 <html lang="en">
     <head>
-        <title>Bike Parking</title>
+        <title>{% block title %}Bike Parking{% endblock %}</title>
         <link href="../static/css/bootstrap.min.css" rel="stylesheet" type="text/css">
         <link href="../static/css/styles.css" rel="stylesheet" type="text/css" />
     </head>
@@ -15,5 +15,7 @@
       {{ rack.lat }}, {{rack.lng}}
       {% endfor %}
      </p>
+     {% block content %}
+     {% endblock %}
     </body>
 </html>

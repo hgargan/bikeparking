@@ -1,4 +1,5 @@
 from django.db import models
+from django.forms import ModelForm
 
 # Create your models here.
 
@@ -31,5 +32,15 @@ class review(models.Model):
         
     def __unicode__(self):
         return u'%s, %s' % (self.username, self.rating)
+    
+class rackForm(ModelForm):
+    class Meta:
+        model = rack
+        fields = ['lat', 'lng','description', 'capacity', 'covered', 'intended']
+        
+class reviewForm(ModelForm):
+    class Meta:
+        model = review
+        fields = ['username', 'rating', 'review']
     
 

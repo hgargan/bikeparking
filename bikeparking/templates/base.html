@@ -3,12 +3,20 @@
 
 <html lang="en">
     <head>
-        <title>Bike Parking</title>
+        <title>{% block title %}Bike Parking{% endblock %}</title>
         <link href="../static/css/bootstrap.min.css" rel="stylesheet" type="text/css">
         <link href="../static/css/styles.css" rel="stylesheet" type="text/css" />
     </head>
 
     <body>
-      {% block content %}{% endblock %}
+      This is a test.
+     <p>{% for rack in racks %}
+        {{ rack.description }}
+      {{ rack.lat }}, {{rack.lng}}
+      {% endfor %}
+     </p>
+     <form method ="post">{%csrf_token%}{{ form }}<input type="submit" value="Save"></form>
+     {% block content %}
+     {% endblock %}
     </body>
 </html>

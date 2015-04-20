@@ -1,5 +1,5 @@
 from django.contrib import admin
-from parking.models import rack, review
+from parking.models import Rack, Review
 # Register your models here.
-admin.site.register(rack)
-admin.site.register(review)
+admin.site.register(Rack)
+admin.site.register(Review)

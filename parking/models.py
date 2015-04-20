@@ -41,6 +41,6 @@ class rackForm(ModelForm):
 class reviewForm(ModelForm):
     class Meta:
         model = Review
-        fields = ['username', 'rating', 'review']
+        fields = ['rack','username', 'rating', 'review', ]
     
 

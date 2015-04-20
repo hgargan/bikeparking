@@ -22,11 +22,11 @@ def detail (request, pk):
     })
 
 def review(request):
-    form = rackForm(request.POST or None)
-    if form.is_valid():
-        form.save()
+    form2 = reviewForm(request.POST or None)
+    if form2.is_valid():
+        form2.save()
     return render(request, "parking/review.html", {
-            'form': form 
+            'form2': form2
     })
 
 def submit(request):

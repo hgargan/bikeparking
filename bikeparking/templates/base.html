@@ -10,11 +10,12 @@
 
     <body>
       This is a test.
-     <p>{% for rack in racks %}
+     {% for rack in racks %}
+     <p></p>
         {{ rack.description }}
-      {{ rack.lat }}, {{rack.lng}}
+      {{ rack.lat }}, {{rack.lng}}</p>
       {% endfor %}
-     </p>
+
      <form method ="post">{%csrf_token%}{{ form }}<input type="submit" value="Save"></form>
      {% block content %}
      {% endblock %}

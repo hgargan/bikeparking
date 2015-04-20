@@ -3,7 +3,7 @@ from django.forms import ModelForm
 
 # Create your models here.
 
-class rack(models.Model):
+class Rack(models.Model):
     lat = models.CharField(unique=False, max_length=50)
     lng = models.CharField(unique=False, max_length=50)
     description = models.CharField(unique=False, max_length=1000)
@@ -18,12 +18,12 @@ class rack(models.Model):
     def __unicode__(self):
         return u'%s, %s' % (self.description, self.capacity)
     
-class review(models.Model):
+class Review(models.Model):
     username = models.CharField(unique=False, max_length=50)
     rating = models.IntegerField(max_length=1, null='True')
     review = models.CharField(unique=False, max_length=1000)
     crime = models.BooleanField(default=False)
-    rack = models.ForeignKey(rack)
+    rack = models.ForeignKey(Rack)
     
     
     class Meta(object):
@@ -35,12 +35,12 @@ class review(models.Model):
     
 class rackForm(ModelForm):
     class Meta:
-        model = rack
+        model = Rack
         fields = ['lat', 'lng','description', 'capacity', 'covered', 'intended']
         
 class reviewForm(ModelForm):
     class Meta:
-        model = review
+        model = Review
         fields = ['username', 'rating', 'review']
     
 

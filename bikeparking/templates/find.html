@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+    
+{% block content %}
+
+<!--MAPBOX-->
+<script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.css' rel='stylesheet' />
+<!-- TURF.JS -->
+<script src='http:////api.tiles.mapbox.com/mapbox.js/plugins/turf/v2.0.0/turf.min.js'></script>
+<!-- LEAFLET PLUGINS -->
+<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.2.0/leaflet-omnivore.min.js'></script>
+<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-label/v0.2.1/leaflet.label.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-label/v0.2.1/leaflet.label.css' rel='stylesheet'/>
+<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.24.0/L.Control.Locate.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.24.0/L.Control.Locate.css' rel='stylesheet' />
+
+<style>
+    #map {width: 100vw; height: 80vh;}
+    .list-item {border: 1px black solid; padding: 10px; margin: 10px;}
+</style>
+
+<div id='map'></div>
+<div id='list'></div>
+
+<script>
+    var ll
+    var rack
+    var racks = []
+    
+    L.mapbox.accessToken = 'pk.eyJ1IjoiZWxjdXJyIiwiYSI6IkZMekZlUEEifQ.vsXDy4z_bxRXyhSIvBXc2A';
+    var map = L.mapbox.map('map');
+    var Thunderforest_OpenCycleMap = L.tileLayer('http://{s}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="http://www.opencyclemap.org">OpenCycleMap</a>, &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        zoomControl: false,
+    })
+    .addTo(map)
+    L.control.locate().addTo(map);
+    map.setView([35.912, -79.05], 14);
+    
+    {% for rack in racks %}
+	ll = [{{ rack.lng }}, {{ rack.lat }}]
+	console.log(ll)
+	rack = turf.point(ll)
+	console.log(rack)
+	racks.push(rack)
+	console.log(racks)
+    
+	document.getElementById('list').innerHTML += '<a href="{% url 'detail' rack.id %}">'
+	document.getElementById('list').innerHTML += '<div class="list-item"> <h3>Here is a Parking Spot!</h3><a href="{% url 'detail' rack.id %}">' + rack.id + '</a>'+ '</div>'
+	document.getElementById('list').innerHTML += '</a>'
+    {% endfor %}
+    
+    
+    var fc = turf.featurecollection(racks)
+    console.log(fc)
+    
+    var features = L.mapbox.featureLayer(fc).addTo(map)
+    console.log(features)
+    
+
+    
+    
+	
+</script>
+
+{% endblock %}

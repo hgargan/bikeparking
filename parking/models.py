@@ -1,5 +1,6 @@
 from django.db import models
 from django.forms import ModelForm
+import datetime
 
 # Create your models here.
 
@@ -24,6 +25,7 @@ class Review(models.Model):
     review = models.CharField(unique=False, max_length=1000)
     crime = models.BooleanField(default=False)
     rack = models.ForeignKey(Rack)
+    date_created = models.DateTimeField(auto_now=True, default=datetime.now)
     
     
     class Meta(object):

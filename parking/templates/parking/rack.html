@@ -3,5 +3,17 @@
 {% load static from staticfiles %}
 
 {% block content %}
-
+    
+<h1>{{ rack.description }}</h1>
+<p>Number of spots: {{ rack.capacity }}</p>
+<p>{{ rack.review }}</p>
+<p><a href="{% url 'review' rack.id %}">Write a review</a></p>
+{% for review in reviews %}
+    <h4>User: {{ review.username }}</h4>
+    <p>Review submitted: </p>
+    <p>Overall rating (out of 10): {{ review.rating}} </p>
+    <h4>Comments:</h4>
+    <p>{{ review.review }}</p>
+    <hr>
+{% endfor %}
 {% endblock %}

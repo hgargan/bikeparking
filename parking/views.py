@@ -21,12 +21,14 @@ def detail (request, pk):
         'reviews': reviews
     })
 
-def review(request):
-    form2 = reviewForm(request.POST or None)
+def review(request, pk):
+    rack = get_object_or_404(Rack, id=pk)
+    form2 = reviewForm(request.POST or None, initial={'rack': rack})
     if form2.is_valid():
         form2.save()
     return render(request, "parking/review.html", {
-            'form2': form2
+            'form2': form2,
+            'rack': rack
     })
 
 def submit(request):

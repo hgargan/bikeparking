@@ -4,6 +4,8 @@
 
 {% block content %}
     
+</script>
+<script src='https://code.jquery.com/jquery-1.11.0.min.js'></script>
 <!--MAPBOX-->
 <script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.js'></script>
 <link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.css' rel='stylesheet' />
@@ -15,19 +17,39 @@
 <link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-label/v0.2.1/leaflet.label.css' rel='stylesheet'/>
 <script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.24.0/L.Control.Locate.js'></script>
 <link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.24.0/L.Control.Locate.css' rel='stylesheet' />
+<!-- DATATABLE.NET-->
+<script src='http://cdn.datatables.net/1.10.5/js/jquery.dataTables.min.js'></script>
+<link href='http://cdn.datatables.net/1.10.5/css/jquery.dataTables.min.css'>
+<link href="http://cdn.datatables.net/responsive/1.0.2/css/dataTables.responsive.css">
 
 <style>
     #map {width: 100vw; height: 80vh;}
+    #find {position: absolute; z-index: 50; top: 20px; left: 50px; padding: 7px; border-radius: 5px; background-color: #fff;}
+    #list {margin: 1vw; width: 98vw;}
+    td {margin: 10px; border-top: 1px black solid; padding: 5px;}
     .list-item {border: 1px black solid; padding: 10px; margin: 10px;}
 </style>
 
+<button id="find" onclick='find()'>Find a Rack!</button>
 <div id='map'></div>
-<div id='list'></div>
+<table id='list'>
+    <thead>
+        <th>Photo</th>
+        <th></th>
+        <th>Description</th>
+        <th>Capacity</th>
+        <th>Covered?</th>
+        <th>Intended as a bike rack?</th>
+        <th>Distance</th>
+    </thead>
+    <tbody></tbody>
+</table>
 
 <script>
-    var ll
-    var rack
+    
     var racks = []
+    var selection = []
+    var me 
     
     L.mapbox.accessToken = 'pk.eyJ1IjoiZWxjdXJyIiwiYSI6IkZMekZlUEEifQ.vsXDy4z_bxRXyhSIvBXc2A';
     var map = L.mapbox.map('map');
@@ -36,29 +58,210 @@
         zoomControl: false,
     })
     .addTo(map)
-    L.control.locate().addTo(map);
+    //L.control.locate().addTo(map)
+    
     map.setView([35.912, -79.05], 14);
     
     {% for rack in racks %}
-	ll = [{{ rack.lng }}, {{ rack.lat }}]
-	console.log(ll)
-	rack = turf.point(ll)
-	console.log(rack)
+	var ll = [{{ rack.lng }}, {{ rack.lat }}]
+	var rack = turf.point(ll)
+	//console.log("ll " + ll)
 	racks.push(rack)
-	console.log(racks)
+        
+        var tableRef = document.getElementById('list').getElementsByTagName('tbody')[0];
+
+        // Insert a row in the table at the last row
+        var newRow   = tableRef.insertRow(tableRef.rows.length);
+        newRow.onclick="window.open({% url 'detail' rack.id %})"
+        
+        // Insert a cell in the row at index 0
+        var newCell0  = newRow.insertCell(0);
+        var newCell1  = newRow.insertCell(1);
+        var newCell2  = newRow.insertCell(2);
+        var newCell3  = newRow.insertCell(3);
+        var newCell4  = newRow.insertCell(4);
+        var newCell5  = newRow.insertCell(5);
+        var newCell6  = newRow.insertCell(6);
+        
+        // Append a text node to the cell
+        var img = document.createElement("img");
+        img.src = "http://upload.wikimedia.org/wikipedia/en/4/4a/Bike_Rack.jpg";
+        img.style.width = "100px"
+        var newText0  = document.createTextNode('image')
+        var a = document.createElement('a');
+        var linkText = document.createTextNode("{{rack.description}}");
+        a.appendChild(linkText);
+        a.href = "{% url 'detail' rack.id %}";
+        var newText1  = document.createTextNode('{{rack.id}}')
+        var newText2  = document.createTextNode('<a href="{% url 'detail' rack.id %}">{{rack.description}}</a>')
+        var newText3  = document.createTextNode('{{rack.capacity}}')
+        var newText4  = document.createTextNode('{{rack.covered}}')
+        var newText5  = document.createTextNode('{{rack.intended}}')
+        var a2 = document.createElement('button');
+        var linkText2 = document.createTextNode("find");
+        a2.appendChild(linkText2);
+        a2.onclick = function(){find()}
+        var newText6  = document.createTextNode('distance')
+
+        
+        newCell0.appendChild(img);
+        //newCell1.appendChild(newText1);
+        newCell2.appendChild(a);
+        newCell3.appendChild(newText3);
+        newCell4.appendChild(newText4);
+        newCell5.appendChild(newText5);
+        newCell6.appendChild(a2);
     
-	document.getElementById('list').innerHTML += '<a href="{% url 'detail' rack.id %}">'
-	document.getElementById('list').innerHTML += '<div class="list-item"> <h3>Here is a Parking Spot!</h3><a href="{% url 'detail' rack.id %}">' + rack.id + '</a>'+ '</div>'
-	document.getElementById('list').innerHTML += '</a>'
+	/*document.getElementById('list').innerHTML += '<tr>'
+        document.getElementById('list').innerHTML += '<td> image </br> {{rack.description}} </td>'
+        document.getElementById('list').innerHTML += '<td> distance </td>'
+	//document.getElementById('list').innerHTML += '<div class="list-item"> <h3>Here is a Parking Spot!</h3><a href="{% url 'detail' rack.id %}">' + rack.id + '</a>'+ '</div>'
+	document.getElementById('list').innerHTML += '</tr>'*/
     {% endfor %}
     
     
     var fc = turf.featurecollection(racks)
-    console.log(fc)
     
     var features = L.mapbox.featureLayer(fc).addTo(map)
-    console.log(features)
     
+    features.eachLayer(function(marker) {
+                marker.on('click', function(){
+                    console.log(marker)
+                    var url = "/detail/" + marker.feature.properties.id
+                    console.log(url)
+                    window.location = url
+                })
+            })
+    
+    function find(){
+        document.getElementById("list").innerHTML="<tbody></tbody>"
+        map.locate().on('locationfound', function(e){
+            /// FIND LOCATION
+            var marker = L.marker([e.latitude, e.longitude]).bindPopup('Your ass is here :)');
+            me = [e.latitude, e.longitude]
+            var circle = L.circle([e.latitude, e.longitude], 100, {
+                weight: 3,
+                color: 'blue',
+                fillColor: '#cacaca',
+                fillOpacity: 0.2
+            });
+            map.addLayer(marker);
+            map.addLayer(circle);
+            map.setView(me, 18)
+            
+            {% for rack in racks %}
+                /// CREATE POINTS AND CALC DISTANCE
+                var ll = [{{ rack.lng }}, {{ rack.lat }}]
+                var point1 = {
+                    "type": "Feature",
+                    "properties": {},
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": [e.longitude, e.latitude]
+                    }
+                };
+                var point2 = {
+                    "type": "Feature",
+                    "properties": {
+                        "id": rack.id
+                    },
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": ll
+                    }
+                };
+                var units = "miles";
+                var distance = turf.distance(point1, point2, units);
+                console.log(distance + " mi")
+                
+                /// ADD DISTANCE PROPERTY
+                point2 = {
+                    "type": "Feature",
+                    "properties": {
+                        "id": {{rack.id}},
+                        "distance" : distance
+                    },
+                    "geometry": {
+                      "type": "Point",
+                      "coordinates": ll
+                    }
+                };
+                /// PUSH POINT OBJECTS TO ARRAY
+                selection.push(point2)
+            
+                var tableRef = document.getElementById('list').getElementsByTagName('tbody')[0];
+
+                // Insert a row in the table at the last row
+                var newRow   = tableRef.insertRow(tableRef.rows.length);
+                newRow.onclick="window.open({% url 'detail' rack.id %})"
+                
+                // Insert a cell in the row at index 0
+                var newCell0  = newRow.insertCell(0);
+                var newCell1  = newRow.insertCell(1);
+                var newCell2  = newRow.insertCell(2);
+                var newCell3  = newRow.insertCell(3);
+                var newCell4  = newRow.insertCell(4);
+                var newCell5  = newRow.insertCell(5);
+                var newCell6  = newRow.insertCell(6);
+                
+                // Append a text node to the cell
+                var img = document.createElement("img");
+                img.src = "http://upload.wikimedia.org/wikipedia/en/4/4a/Bike_Rack.jpg";
+                img.style.width = "100px"
+                var newText0  = document.createTextNode('image')
+                var a = document.createElement('a');
+                var linkText = document.createTextNode("{{rack.description}}");
+                a.href = "{% url 'detail' rack.id %}";
+                a.appendChild(linkText);
+                var newText1  = document.createTextNode('{{rack.id}}')
+                var newText2  = document.createTextNode('<a href="{% url 'detail' rack.id %}">{{rack.description}}</a>')
+                var newText3  = document.createTextNode('{{rack.capacity}}')
+                var newText4  = document.createTextNode('{{rack.covered}}')
+                var newText5  = document.createTextNode('{{rack.intended}}')
+                var newText6  = document.createTextNode(distance)
+        
+                
+                newCell0.appendChild(img);
+                //newCell1.appendChild(newText1);
+                newCell2.appendChild(a);
+                newCell3.appendChild(newText3);
+                newCell4.appendChild(newText4);
+                newCell5.appendChild(newText5);
+                newCell6.appendChild(newText6);
+                
+            {% endfor %}
+                
+            /// SORT ARRAY
+            function compare(a,b) {
+                if (a.properties.distance < b.properties.distance)
+                   return -1;
+                if (a.properties.distance > b.properties.distance)
+                  return 1;
+                return 0;
+              }
+              
+            var sorted = selection.sort(compare);
+            console.log(sorted)
+    
+            /// CREATE SELECTION FEATURE CLASS
+            map.removeLayer(features)
+            var fc_sel = turf.featurecollection(sorted)
+            var racks_sel = L.mapbox.featureLayer(fc_sel).addTo(map)
+            
+            racks_sel.eachLayer(function(marker) {
+                marker.on('click', function(){
+                    console.log(marker)
+                    var url = "/detail/" + marker.feature.properties.id
+                    console.log(url)
+                    window.location = url
+                })
+            })
+        })
+    }
+    
+    
+$(document).ready(function() {
+} );    
 
     
     

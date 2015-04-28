@@ -28,6 +28,9 @@
     #submit {position: absolute; z-index: 50; top: 20px; left: 200px; padding: 7px; border-radius: 5px; background-color: #fff;}
     #button {padding: 7px; border-radius: 5px; background-color: #fff; margin: 10px;}
     #list {margin: 1vw; width: 98vw;}
+    #list-div {display: block;}
+    #sorted {margin: 1vw; width: 98vw;}
+    #sorted-div {display: none;}
     td {margin: 10px; border-top: 1px black solid; padding: 5px;}
     .list-item {border: 1px black solid; padding: 10px; margin: 10px;}
 </style>
@@ -37,18 +40,34 @@
     <button id="button" onclick='window.open({% url 'submit' %})'>Submit a Rack</button>
 </div>
 <div id='map'></div>
-<table id='list'>
-    <thead>
-        <th>Photo</th>
-        <th></th>
-        <th>Description</th>
-        <th>Capacity</th>
-        <th>Covered?</th>
-        <th>Intended as a bike rack?</th>
-        <th>Distance</th>
-    </thead>
-    <tbody></tbody>
-</table>
+<div id='list-div'>
+    <table id='list'>
+        <thead>
+            <th>Photo</th>
+            <th></th>
+            <th>Description</th>
+            <th>Capacity</th>
+            <th>Covered?</th>
+            <th>Intended as a bike rack?</th>
+            <th>Distance</th>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+<div id='sorted-div'>
+    <table id='sorted'>
+        <thead>
+            <th>Photo</th>
+            <th></th>
+            <th>Description</th>
+            <th>Capacity</th>
+            <th>Covered?</th>
+            <th>Intended as a bike rack?</th>
+            <th>Distance</th>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
 
 <script>
     
@@ -66,6 +85,7 @@
     //L.control.locate().addTo(map)
     
     map.setView([35.912, -79.05], 14);
+    map.scrollWheelZoom.disable();
     
     {% for rack in racks %}
 	var ll = [{{ rack.lng }}, {{ rack.lat }}]
@@ -151,7 +171,9 @@
             })
     
     function find(){
-        document.getElementById('list').getElementsByTagName('tbody').innerHTML=""
+        document.getElementById('list-div').style.display="none"
+        document.getElementById('sorted-div').style.display="block"
+        //document.getElementById('list').innerHTML="<thead><th>Photo</th><th></th><th>Description</th><th>Capacity</th><th>Covered?</th><th>Intended as a bike rack?</th><th>Distance</th></thead><tbody></tbody>"
         map.locate().on('locationfound', function(e){
             /// FIND LOCATION
             var marker = L.marker([e.latitude, e.longitude]).bindPopup('Your ass is here :)');
@@ -206,7 +228,7 @@
                 /// PUSH POINT OBJECTS TO ARRAY
                 selection.push(point2)
             
-                var tableRef = document.getElementById('list').getElementsByTagName('tbody')[0];
+                var tableRef = document.getElementById('sorted').getElementsByTagName('tbody')[0];
 
                 // Insert a row in the table at the last row
                 var newRow   = tableRef.insertRow(tableRef.rows.length);
@@ -248,7 +270,7 @@
                 
             {% endfor %}
             
-            makeTable('#list')
+            makeTable('#sorted')
                 
             /// SORT ARRAY
             function compare(a,b) {
@@ -282,7 +304,9 @@
 
     function makeTable(id) {
         console.log("make table")
-        $(id).DataTable()
+        $(id).DataTable({
+            "order": [[ 6, "asc" ]]
+        })
     }
     
 $(document).ready(function() {

@@ -3,5 +3,9 @@
 {% load static from staticfiles %}
 
 {% block content %}
+    {% for rack in rack.review_set.all %}
+        <a href="{% url 'rack' rack.id %}">Back</a>
+    {% endfor %}
+    <p><form method ="post">{%csrf_token%}{{ form2 }}</p><p><input type="submit" value="Save"></form></p>
 
 {% endblock %}

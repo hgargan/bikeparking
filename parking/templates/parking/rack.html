@@ -3,7 +3,7 @@
 {% load static from staticfiles %}
 
 {% block content %}
-    
+<a href="{%url 'find' %}">Back</a>
 <h1>{{ rack.description }}</h1>
 <p>Number of spots: {{ rack.capacity }}</p>
 <p>{{ rack.review }}</p>

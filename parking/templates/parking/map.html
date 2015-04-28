@@ -25,12 +25,17 @@
 <style>
     #map {width: 100vw; height: 80vh;}
     #find {position: absolute; z-index: 50; top: 20px; left: 50px; padding: 7px; border-radius: 5px; background-color: #fff;}
+    #submit {position: absolute; z-index: 50; top: 20px; left: 200px; padding: 7px; border-radius: 5px; background-color: #fff;}
+    #button {padding: 7px; border-radius: 5px; background-color: #fff; margin: 10px;}
     #list {margin: 1vw; width: 98vw;}
     td {margin: 10px; border-top: 1px black solid; padding: 5px;}
     .list-item {border: 1px black solid; padding: 10px; margin: 10px;}
 </style>
 
-<button id="find" onclick='find()'>Find a Rack!</button>
+<div>
+    <button id="button" onclick='find()'>Find a Rack!</button>
+    <button id="button" onclick='window.open({% url 'submit' %})'>Submit a Rack</button>
+</div>
 <div id='map'></div>
 <table id='list'>
     <thead>
@@ -64,9 +69,20 @@
     
     {% for rack in racks %}
 	var ll = [{{ rack.lng }}, {{ rack.lat }}]
-	var rack = turf.point(ll)
+	//var rack = turf.point(ll)
 	//console.log("ll " + ll)
-	racks.push(rack)
+	var rack = {
+            "type": "Feature",
+            "properties": {
+                "id": {{rack.id}}    
+            },
+            "geometry": {
+              "type": "Point",
+              "coordinates": ll
+            }
+        };
+        racks.push(rack)
+        
         
         var tableRef = document.getElementById('list').getElementsByTagName('tbody')[0];
 
@@ -119,6 +135,7 @@
 	document.getElementById('list').innerHTML += '</tr>'*/
     {% endfor %}
     
+    makeTable('#list')
     
     var fc = turf.featurecollection(racks)
     
@@ -134,7 +151,7 @@
             })
     
     function find(){
-        document.getElementById("list").innerHTML="<tbody></tbody>"
+        document.getElementById('list').getElementsByTagName('tbody').innerHTML=""
         map.locate().on('locationfound', function(e){
             /// FIND LOCATION
             var marker = L.marker([e.latitude, e.longitude]).bindPopup('Your ass is here :)');
@@ -230,6 +247,8 @@
                 newCell6.appendChild(newText6);
                 
             {% endfor %}
+            
+            makeTable('#list')
                 
             /// SORT ARRAY
             function compare(a,b) {
@@ -257,11 +276,19 @@
                 })
             })
         })
+    
     }
     
+
+    function makeTable(id) {
+        console.log("make table")
+        $(id).DataTable()
+    }
     
 $(document).ready(function() {
-} );    
+} );
+
+
 
     
     

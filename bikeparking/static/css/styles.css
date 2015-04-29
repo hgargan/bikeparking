@@ -1,0 +1,48 @@
+/*STYLES FOR RACKFIND
+
+Color Reference:
+
+
+*/
+
+.footer{
+  position: relative;
+  bottom: 0%;
+  width: 100%;
+  text-align: center;
+  height: 50px;
+  background: green;
+  padding: 15px 15px 15px 15px;
+  color: white;
+}
+
+.footer > p,
+.footer > p> a{
+  color: #ffffff;
+  text-decoration: none;
+
+}
+
+.fixnav{
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.topThis{
+  margin-top: 70px;
+}
+
+.container{
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+.btn-default{
+  margin: 10px;
+}
+
+a:hover{
+  cursor: pointer;
+}

@@ -4,13 +4,13 @@
 <html lang="en">
     <head>
         <title>{% block title %}Bike Parking{% endblock %}</title>
-        <link href="../static/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+        <link href="../static/css/bikestrap.css" rel="stylesheet" type="text/css">
         <link href="../static/css/styles.css" rel="stylesheet" type="text/css" />
     </head>
 
     <body>
         <header>
-            <div class="nav navbar navbar-default">
+            <div class="nav navbar navbar-default fixnav">
                 <div class="container">
                     <div class="navbar-header">
                         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
@@ -25,15 +25,17 @@
                         <ul class="nav navbar-nav">
                             <li><a href="{% url 'submit' %}">Submit Rack</a></li>
                             <li><a href="{% url 'find' %}">Find Racks</a></li>
-                            <li><a href="">About</a></li>
+                            <li><a href="{% url 'about' %}">About</a></li>
                         </ul>
                     </div>
                 </div>
             </div>
         <li></li>
         </header>
+    <div class="container topThis">
      {% block content %}
      {% endblock %}
-     <footer><p>A Django project made for JOMC 583, Spring 2015.<p></footer>
+    </div>
+     <footer class="footer"><p>A Django project made for JOMC 583, Spring 2015.<p></footer>
     </body>
 </html>

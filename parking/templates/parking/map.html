@@ -3,7 +3,7 @@
 {% load static from staticfiles %}
 
 {% block content %}
-    
+
 </script>
 <script src='https://code.jquery.com/jquery-1.11.0.min.js'></script>
 <!--MAPBOX-->
@@ -36,8 +36,8 @@
 </style>
 
 <div>
-    <button id="button" onclick='find()'>Find a Rack!</button>
-    <button id="button" onclick='window.open({% url 'submit' %})'>Submit a Rack</button>
+    <button class="btn-lg btn-default" onclick='find()'>Find a Rack!</button>
+    <button class="btn-lg btn-default" onclick='window.open({% url 'submit' %})'>Submit a Rack</button>
 </div>
 <div id='map'></div>
 <div id='list-div'>
@@ -70,11 +70,11 @@
 </div>
 
 <script>
-    
+
     var racks = []
     var selection = []
-    var me 
-    
+    var me
+
     L.mapbox.accessToken = 'pk.eyJ1IjoiZWxjdXJyIiwiYSI6IkZMekZlUEEifQ.vsXDy4z_bxRXyhSIvBXc2A';
     var map = L.mapbox.map('map');
     var Thunderforest_OpenCycleMap = L.tileLayer('http://{s}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png', {
@@ -83,10 +83,10 @@
     })
     .addTo(map)
     //L.control.locate().addTo(map)
-    
+
     map.setView([35.912, -79.05], 14);
     map.scrollWheelZoom.disable();
-    
+
     {% for rack in racks %}
 	var ll = [{{ rack.lng }}, {{ rack.lat }}]
 	//var rack = turf.point(ll)
@@ -94,7 +94,7 @@
 	var rack = {
             "type": "Feature",
             "properties": {
-                "id": {{rack.id}}    
+                "id": {{rack.id}}
             },
             "geometry": {
               "type": "Point",
@@ -102,14 +102,14 @@
             }
         };
         racks.push(rack)
-        
-        
+
+
         var tableRef = document.getElementById('list').getElementsByTagName('tbody')[0];
 
         // Insert a row in the table at the last row
         var newRow   = tableRef.insertRow(tableRef.rows.length);
         newRow.onclick="window.open({% url 'detail' rack.id %})"
-        
+
         // Insert a cell in the row at index 0
         var newCell0  = newRow.insertCell(0);
         var newCell1  = newRow.insertCell(1);
@@ -118,7 +118,7 @@
         var newCell4  = newRow.insertCell(4);
         var newCell5  = newRow.insertCell(5);
         var newCell6  = newRow.insertCell(6);
-        
+
         // Append a text node to the cell
         var img = document.createElement("img");
         img.src = "http://upload.wikimedia.org/wikipedia/en/4/4a/Bike_Rack.jpg";
@@ -139,7 +139,7 @@
         a2.onclick = function(){find()}
         var newText6  = document.createTextNode('distance')
 
-        
+
         newCell0.appendChild(img);
         //newCell1.appendChild(newText1);
         newCell2.appendChild(a);
@@ -147,20 +147,20 @@
         newCell4.appendChild(newText4);
         newCell5.appendChild(newText5);
         newCell6.appendChild(a2);
-    
+
 	/*document.getElementById('list').innerHTML += '<tr>'
         document.getElementById('list').innerHTML += '<td> image </br> {{rack.description}} </td>'
         document.getElementById('list').innerHTML += '<td> distance </td>'
 	//document.getElementById('list').innerHTML += '<div class="list-item"> <h3>Here is a Parking Spot!</h3><a href="{% url 'detail' rack.id %}">' + rack.id + '</a>'+ '</div>'
 	document.getElementById('list').innerHTML += '</tr>'*/
     {% endfor %}
-    
+
     makeTable('#list')
-    
+
     var fc = turf.featurecollection(racks)
-    
+
     var features = L.mapbox.featureLayer(fc).addTo(map)
-    
+
     features.eachLayer(function(marker) {
                 marker.on('click', function(){
                     console.log(marker)
@@ -169,7 +169,7 @@
                     window.location = url
                 })
             })
-    
+    map.fitBounds(features.getBounds())
     function find(){
         document.getElementById('list-div').style.display="none"
         document.getElementById('sorted-div').style.display="block"
@@ -187,7 +187,7 @@
             map.addLayer(marker);
             map.addLayer(circle);
             map.setView(me, 18)
-            
+
             {% for rack in racks %}
                 /// CREATE POINTS AND CALC DISTANCE
                 var ll = [{{ rack.lng }}, {{ rack.lat }}]
@@ -212,7 +212,7 @@
                 var units = "miles";
                 var distance = turf.distance(point1, point2, units);
                 console.log(distance + " mi")
-                
+
                 /// ADD DISTANCE PROPERTY
                 point2 = {
                     "type": "Feature",
@@ -227,13 +227,13 @@
                 };
                 /// PUSH POINT OBJECTS TO ARRAY
                 selection.push(point2)
-            
+
                 var tableRef = document.getElementById('sorted').getElementsByTagName('tbody')[0];
 
                 // Insert a row in the table at the last row
                 var newRow   = tableRef.insertRow(tableRef.rows.length);
                 newRow.onclick="window.open({% url 'detail' rack.id %})"
-                
+
                 // Insert a cell in the row at index 0
                 var newCell0  = newRow.insertCell(0);
                 var newCell1  = newRow.insertCell(1);
@@ -242,7 +242,7 @@
                 var newCell4  = newRow.insertCell(4);
                 var newCell5  = newRow.insertCell(5);
                 var newCell6  = newRow.insertCell(6);
-                
+
                 // Append a text node to the cell
                 var img = document.createElement("img");
                 img.src = "http://upload.wikimedia.org/wikipedia/en/4/4a/Bike_Rack.jpg";
@@ -258,8 +258,8 @@
                 var newText4  = document.createTextNode('{{rack.covered}}')
                 var newText5  = document.createTextNode('{{rack.intended}}')
                 var newText6  = document.createTextNode((distance.toFixed(2)) + " mi")
-        
-                
+
+
                 newCell0.appendChild(img);
                 //newCell1.appendChild(newText1);
                 newCell2.appendChild(a);
@@ -267,11 +267,11 @@
                 newCell4.appendChild(newText4);
                 newCell5.appendChild(newText5);
                 newCell6.appendChild(newText6);
-                
+
             {% endfor %}
-            
+
             makeTable('#sorted')
-                
+
             /// SORT ARRAY
             function compare(a,b) {
                 if (a.properties.distance < b.properties.distance)
@@ -280,15 +280,15 @@
                   return 1;
                 return 0;
               }
-              
+
             var sorted = selection.sort(compare);
             console.log(sorted)
-    
+
             /// CREATE SELECTION FEATURE CLASS
             map.removeLayer(features)
             var fc_sel = turf.featurecollection(sorted)
             var racks_sel = L.mapbox.featureLayer(fc_sel).addTo(map)
-            
+
             racks_sel.eachLayer(function(marker) {
                 marker.on('click', function(){
                     console.log(marker)
@@ -298,9 +298,9 @@
                 })
             })
         })
-    
+
     }
-    
+
 
     function makeTable(id) {
         console.log("make table")
@@ -308,15 +308,15 @@
             "order": [[ 6, "asc" ]]
         })
     }
-    
+
 $(document).ready(function() {
 } );
 
 
 
-    
-    
-	
+
+
+
 </script>
 
 {% endblock %}

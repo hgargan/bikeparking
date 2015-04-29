@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404 
+from django.shortcuts import render, get_object_or_404
 from parking.models import Rack
 from parking.models import Review
 from parking.models import rackForm, reviewForm
@@ -36,7 +36,8 @@ def submit(request):
     if form.is_valid():
         form.save()
     return render(request, "parking/submit.html", {
-            'form': form 
+            'form': form
     })
 
-
+def about(request):
+    return render(request, "parking/about.html")

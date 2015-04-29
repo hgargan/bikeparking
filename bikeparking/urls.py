@@ -11,5 +11,6 @@ urlpatterns = patterns('',
     url(r'^find/', 'parking.views.find', name='find'),
     url(r'^detail/(?P<pk>\d+)$', 'parking.views.detail', name='detail'),
     url(r'^review/(?P<pk>\d+)$', 'parking.views.review', name='review'),
-    url(r'^submit/', 'parking.views.submit', name='submit')
+    url(r'^submit/', 'parking.views.submit', name='submit'),
+    url(r'^about/', 'parking.views.about', name='about')
 )

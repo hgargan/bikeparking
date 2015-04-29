@@ -1,5 +1,7 @@
 from django.db import models
 from django.forms import ModelForm
+from django.utils import timezone
+from django import forms
 
 # Create your models here.
 
@@ -24,7 +26,7 @@ class Review(models.Model):
     review = models.CharField(unique=False, max_length=1000)
     crime = models.BooleanField(default=False)
     rack = models.ForeignKey(Rack)
-    ##date_created = models.DateTimeField('date created', default=datetime.now)
+    date_created = models.DateTimeField(default=timezone.now, auto_now_add=True)
     
     
     class Meta(object):
@@ -35,6 +37,8 @@ class Review(models.Model):
         return u'%s, %s' % (self.username, self.rating)
     
 class rackForm(ModelForm):
+    lat = forms.CharField()
+    
     class Meta:
         model = Rack
         fields = ['lat', 'lng','description', 'capacity', 'covered', 'intended']

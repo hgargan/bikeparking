@@ -3,7 +3,7 @@
 {% load static from staticfiles %}
 
 {% block content %}
-    <p>
-<form method ="post">{%csrf_token%}{{ form }}</p>
+ 
+<p class="form-block" style="width: 80px"><form method ="post">{%csrf_token%}{{ form.as_p }}
 <input type="submit" value="Save"></form>
 {% endblock %}

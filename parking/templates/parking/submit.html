@@ -3,7 +3,110 @@
 {% load static from staticfiles %}
 
 {% block content %}
+
+<!--MAPBOX-->
+<script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.css' rel='stylesheet' />
+<!-- LEAFLET PLUGINS -->
+<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.2.0/leaflet-omnivore.min.js'></script>
+<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-label/v0.2.1/leaflet.label.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-label/v0.2.1/leaflet.label.css' rel='stylesheet'/>
+<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.24.0/L.Control.Locate.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.24.0/L.Control.Locate.css' rel='stylesheet' />
+
+<style>
+    #map {width: 100vw; height: 50vh;}
+    #go-btn {border: 1px solid black; padding 5px; width: 25px}
+    #address {width: 150px; display: inline;}
+</style>
+
+<div id="map"></div>
+
+<button onclick=findMe()>Use my location</button></br>
+<button onclick=displayAddress()>Use an address</button></br>
+<div id="addressForm" style="display: none;">
+    <label for="address">Address: </label>
+    <input type="text" id="address" placeholder="Enter address here">
+    <button onclick=codeAddress()>Go</button>
+</div>
+
  
 <p class="form-block" style="width: 80px"><form method ="post">{%csrf_token%}{{ form.as_p }}
 <input type="submit" value="Save"></form>
+
+
+<script>
+    L.mapbox.accessToken = 'pk.eyJ1IjoiZWxjdXJyIiwiYSI6IkZMekZlUEEifQ.vsXDy4z_bxRXyhSIvBXc2A';
+    var map = L.mapbox.map('map');
+    var Thunderforest_OpenCycleMap = L.tileLayer('http://{s}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="http://www.opencyclemap.org">OpenCycleMap</a>, &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        zoomControl: false,
+    })
+    .addTo(map)
+    //L.control.locate().addTo(map)
+    
+    var geocoder = L.mapbox.geocoder('mapbox.places', {
+        autocomplete: true,
+    })
+    
+    map.setView([35.912, -79.05], 14);
+    map.scrollWheelZoom.disable();
+    
+    function findMe() {
+        console.log("finding me")
+        map.locate().on('locationfound', function(e){
+            /// FIND LOCATION
+            var marker = L.marker([e.latitude, e.longitude]).bindPopup('here');
+            me = [e.latitude, e.longitude]
+            console.log(me)
+            var circle = L.circle([e.latitude, e.longitude], 100, {
+                weight: 3,
+                color: 'blue',
+                fillColor: '#cacaca',
+                fillOpacity: 0.2
+            });
+            map.addLayer(marker);
+            map.addLayer(circle);
+            map.setView(me, 18)
+            
+            document.getElementById('id_lat').value = me[0]
+            document.getElementById('id_lng').value = me[1]
+        })
+    }
+    
+    function displayAddress() {
+        document.getElementById("addressForm").style.display= "block"
+    }
+    
+    function codeAddress(){
+        var val = document.getElementById("address").value
+        console.log(val)
+        geocoder.query(val, showMap);
+
+        function showMap(err, data) {
+            console.log(data.latlng)
+            // The geocoder can return an area, like a city, or a
+            // point, like an address. Here we handle both cases,
+            // by fitting the map bounds to an area or zooming to a point.
+            if (data.lbounds) {
+                map.fitBounds(data.lbounds);
+                var marker = L.marker(data.latlng).bindPopup('here')
+                var circle = L.circle(data.latlng, 100, {
+                    weight: 3,
+                    color: 'blue',
+                    fillColor: '#cacaca',
+                    fillOpacity: 0.2
+                });
+                map.addLayer(marker);
+                map.addLayer(circle);
+                
+                document.getElementById('id_lat').value = data.latlng[0]
+                document.getElementById('id_lng').value = data.latlng[1]
+            } else if (data.latlng) {
+                map.setView([35.912, -79.05], 14);
+            }
+        }
+    }
+</script>
+
 {% endblock %}

@@ -1,7 +1,68 @@
 {# in parking/templates/parking/home.html #}
-{% extends 'base.html' %}
 {% load static from staticfiles %}
+<html>
+    <head>
+        <link href="../static/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+        <link href="../static/css/styles.css" rel="stylesheet" type="text/css" />
+        <style>
+    
+            .splash-button {
+                border: 3px solid #000;
+                border-radius: 40px;
+                text-align: center;
+                padding: 2% 5% 5% 5%;
+                background-color: #fff;
+                font-weight: 300;
+            }
+            
+            .splash-button a {
+                color: #000;
+                font-weight: 300;
+            }
+            
+            .splash-button a:hover {
+                text-decoration: none;
+                color: #2C3821;
+            }
+            
+            .splash-button:hover {
+                background-color: #eee;
+                text-decoration: none;
+                
+            }
+            h1 {
+                font-size: 150%;
+            }
+            
+            a {
+                color: #eee;
+                font-size: 125%;
+            }
+            
+            body {
+                text-align: center;
+                padding: 10% 30% 50% 30%;
+                background-color: #9CC776;
+            }
+            .splash-title {
+                font-size: 225%;
+                font-weight: 700;
+            }
+            
+        </style>
+    </head>
+    <body>
+        <p class="splash-title">RackFind</h1>
+        <a href="{% url 'find' %}"><div class="splash-button"><h1>Need somewhere to park your bike?</h1></div></a>
+        </br>
+        </br>
+        </br>
+        <a href="">About</a>
+        
+    </body>
 
+</html>
 {% block content %}
+    
 
 {% endblock %}

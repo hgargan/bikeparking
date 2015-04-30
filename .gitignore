@@ -1,2 +1,5 @@
 *.pyc
 .DS_Store
+local_settings.py
+db.sqlite3
+staticfiles

@@ -15,7 +15,7 @@
 <link href='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.24.0/L.Control.Locate.css' rel='stylesheet' />
 
 <style>
-    #map {width: 100vw; height: 80vh;}
+    #map {width: 100vw; height: 50vh;}
     #go-btn {border: 1px solid black; padding 5px; width: 25px}
     #address {width: 150px; display: inline;}
 </style>
@@ -33,10 +33,6 @@
  
 <p class="form-block" style="width: 80px"><form method ="post">{%csrf_token%}{{ form.as_p }}
 <input type="submit" value="Save"></form>
-    
-#id_lat
-#id_lng
-(.innerHTML or .val)
 
 
 <script>
@@ -47,7 +43,7 @@
         zoomControl: false,
     })
     .addTo(map)
-    L.control.locate().addTo(map)
+    //L.control.locate().addTo(map)
     
     var geocoder = L.mapbox.geocoder('mapbox.places', {
         autocomplete: true,
@@ -72,6 +68,9 @@
             map.addLayer(marker);
             map.addLayer(circle);
             map.setView(me, 18)
+            
+            document.getElementById('id_lat').value = me[0]
+            document.getElementById('id_lng').value = me[1]
         })
     }
     
@@ -100,6 +99,9 @@
                 });
                 map.addLayer(marker);
                 map.addLayer(circle);
+                
+                document.getElementById('id_lat').value = data.latlng[0]
+                document.getElementById('id_lng').value = data.latlng[1]
             } else if (data.latlng) {
                 map.setView([35.912, -79.05], 14);
             }

@@ -20,9 +20,16 @@
     #address {width: 150px; display: inline;}
 </style>
 
-<div id="map"></div>
+<div class="row">
+  <div class="col-sm-12">
+    <div id="map"></div>
+  </div>
+</div>
 
-<button onclick=findMe()>Use my location</button></br>
+
+<div class="row">
+<div class="col-sm-12" id="submits">
+<button onclick=findMe()>Use my location</button>
 <button onclick=displayAddress()>Use an address</button></br>
 <div id="addressForm" style="display: none;">
     <label for="address">Address: </label>
@@ -30,9 +37,11 @@
     <button onclick=codeAddress()>Go</button>
 </div>
 
- 
+
 <p class="form-block" style="width: 80px"><form method ="post">{%csrf_token%}{{ form.as_p }}
-<input type="submit" value="Save"></form>
+<input type="submit" value="Save" id="savebtn"></form>
+</div>
+</div>
 
 
 <script>
@@ -44,14 +53,14 @@
     })
     .addTo(map)
     //L.control.locate().addTo(map)
-    
+
     var geocoder = L.mapbox.geocoder('mapbox.places', {
         autocomplete: true,
     })
-    
+
     map.setView([35.912, -79.05], 14);
     map.scrollWheelZoom.disable();
-    
+
     function findMe() {
         console.log("finding me")
         map.locate().on('locationfound', function(e){
@@ -68,16 +77,16 @@
             map.addLayer(marker);
             map.addLayer(circle);
             map.setView(me, 18)
-            
+
             document.getElementById('id_lat').value = me[0]
             document.getElementById('id_lng').value = me[1]
         })
     }
-    
+
     function displayAddress() {
         document.getElementById("addressForm").style.display= "block"
     }
-    
+
     function codeAddress(){
         var val = document.getElementById("address").value
         console.log(val)
@@ -99,7 +108,7 @@
                 });
                 map.addLayer(marker);
                 map.addLayer(circle);
-                
+
                 document.getElementById('id_lat').value = data.latlng[0]
                 document.getElementById('id_lng').value = data.latlng[1]
             } else if (data.latlng) {

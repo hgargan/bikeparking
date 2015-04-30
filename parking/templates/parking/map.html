@@ -35,11 +35,19 @@
     .list-item {border: 1px black solid; padding: 10px; margin: 10px;}
 </style>
 
-<div>
+<div class="row">
+  <div class="col-sm-12">
     <button class="btn-lg btn-default" onclick='find()'>Find a Rack!</button>
     <button class="btn-lg btn-default" onclick='window.open({% url 'submit' %})'>Submit a Rack</button>
+  </div>
 </div>
-<div id='map'></div>
+<div class="row">
+  <div class="col-sm-12">
+    <div id='map'></div>
+  </div>
+</div>
+<div class="row">
+<div class="col-sm-12">
 <div id='list-div'>
     <table id='list'>
         <thead>
@@ -67,6 +75,8 @@
         </thead>
         <tbody></tbody>
     </table>
+</div>
+</div>
 </div>
 
 <script>

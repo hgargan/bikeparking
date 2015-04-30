@@ -6,14 +6,16 @@ Color Reference:
 */
 
 .footer{
-  position: relative;
+  position: fixed;
   bottom: 0%;
   width: 100%;
   text-align: center;
   height: 50px;
-  background: green;
+  background: #518226;
   padding: 15px 15px 15px 15px;
   color: white;
+  margin-top: 20px;
+  margin-bottom: 0px;
 }
 
 .footer > p,
@@ -27,16 +29,18 @@ Color Reference:
   position: fixed;
   top: 0;
   width: 100%;
-  z-index: 1000;
+  z-index: 1001;
 }
 
 .topThis{
   margin-top: 70px;
+  margin-bottom: 70px;
 }
 
 .container{
   margin-left: 0px;
   margin-right: 0px;
+
 }
 
 .btn-default{
@@ -45,4 +49,113 @@ Color Reference:
 
 a:hover{
   cursor: pointer;
+}
+
+@media (max-width: 767px){
+  .navbar-header{
+    text-align: center;
+  }
+}
+
+/*TABLE STYLINGS*/
+
+
+button{
+  display: inline-block;
+  margin-bottom: 0;
+  font-weight: bold;
+  text-align: center;
+  vertical-align: middle;
+  touch-action: manipulation;
+  cursor: pointer;
+  background-image: none;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  padding: 6px 12px;
+  font-size: 14px;
+  line-height: 1.428571429;
+  border-radius: 4px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background-color: #518226;
+  margin: 5px;
+}
+
+th{
+  font-weight: bold;
+}
+
+td{
+  border: 1px solid #518226;
+}
+
+td,
+td > a{
+  font-weight: bold;
+}
+
+td > img{
+  border: 2px solid #518226;
+  border-radius: 4px;
+}
+
+#list_info,
+#list_paginate{
+  text-align: center;
+  font-weight: bold;
+}
+
+#list_paginate > a{
+  margin: 10px;
+}
+
+#list_paginate{
+  font-size: 1.5em;
+}
+
+
+/*END TABLE STYLES*/
+
+#map{
+  max-width: 95vw;
+  margin: 15px;
+}
+
+#list{
+  max-width: 95vw;
+  margin-right: 15px;
+}
+
+input{
+  color: black;
+  border: 2px solid #518226;
+  border-radius: 4px;
+}
+
+select{
+  color: black;
+}
+
+#savebtn{
+  background: #518226;
+  color: white;
+  font-weight: bold;
+  font-size: 1.2em;
+  padding: 4px 10px;
+}
+
+#submits{
+  margin-left: 30px;
+}
+
+p,
+a{
+  font-weight: bold;
+}
+
+#about{
+  margin-left: 30px;
+  max-width: 60vw;
 }

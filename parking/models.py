@@ -37,8 +37,9 @@ class Review(models.Model):
         return u'%s, %s' % (self.username, self.rating)
     
 class rackForm(ModelForm):
-    lat = forms.CharField()
-    
+    lat = forms.CharField(widget=forms.HiddenInput)
+    lng = forms.CharField(widget=forms.HiddenInput)
+    ##hidden input widget 
     class Meta:
         model = Rack
         fields = ['lat', 'lng','description', 'capacity', 'covered', 'intended']
